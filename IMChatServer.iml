@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet __external-system-id="Maven" type="web" name="Web">
+      <facet type="Struts2" name="Struts 2">
+        <configuration>
+          <fileset id="s2fileset" name="My Fileset " removed="false">
+            <file>file://$MODULE_DIR$/src/main/resources/struts.xml</file>
+            <file>jar://$MODULE_DIR$/../../m2/repository/org/apache/struts/struts2-convention-plugin/2.5/struts2-convention-plugin-2.5.jar!/struts-plugin.xml</file>
+            <file>jar://$MODULE_DIR$/../../m2/repository/org/apache/struts/struts2-core/2.5/struts2-core-2.5.jar!/struts-default.xml</file>
+            <file>jar://$MODULE_DIR$/../../m2/repository/org/apache/struts/struts2-json-plugin/2.5/struts2-json-plugin-2.5.jar!/struts-plugin.xml</file>
+          </fileset>
+          <propertiesKeys disabled="false" />
+        </configuration>
+      </facet>
+    </facet>
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map>
+          <unit-entry name="hibernate.cfg.xml" value="2b8dca73-7ac6-4088-b223-c31f542511e9" />
+        </datasource-map>
+        <naming-strategy-map />
+        <deploymentDescriptor name="hibernate.cfg.xml" url="file://$MODULE_DIR$/src/main/resources/hibernate.cfg.xml" />
+      </configuration>
+    </facet>
+  </component>
+</module>
