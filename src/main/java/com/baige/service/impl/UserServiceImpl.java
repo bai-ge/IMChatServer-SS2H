@@ -7,6 +7,7 @@ import com.baige.pojo.UsersEntity;
 import com.baige.service.IUserService;
 import com.baige.util.Tools;
 
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceImpl implements IUserService {
@@ -72,9 +73,8 @@ public class UserServiceImpl implements IUserService {
     public void register(UsersEntity user, Map<String, Object> responseMsgMap) {
         if (!checkNameClash(user.getName())) {
             // 插入数据
-            UserDAOImpl userDAO = new UserDAOImpl();
             try {
-                userDAO.doSave(user);
+                getUserDAO().doSave(user);
                 responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
                 responseMsgMap.put(Parm.MEAN, "注册成功");
                 responseMsgMap.put(Parm.USER, user);
@@ -86,6 +86,64 @@ public class UserServiceImpl implements IUserService {
         } else {
             responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
             responseMsgMap.put(Parm.MEAN, "用户已经存在");
+        }
+    }
+
+    @Override
+    public UsersEntity checkUser(int id, String verification) {
+        try {
+            UsersEntity user = getUserDAO().searchUserByIdAndVerification(id, verification);
+            return user;
+        } catch (SqlException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void updateAlias(UsersEntity user, Map<String, Object> responseMsgMap) {
+        try {
+            user = getUserDAO().updateAliasByIdAndVer(user.getId(), user.getVerification(), user.getAlias());
+            if (user != null) {
+                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.MEAN, "更新成功");
+            } else {
+                responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+                responseMsgMap.put(Parm.MEAN, "更新失败");
+            }
+        } catch (SqlException e) {
+            e.printStackTrace();
+            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.MEAN, "更新失败");
+        }
+    }
+
+    @Override
+    public boolean updateHeadImgName(int id, String headImg) {
+        boolean res = false;
+        try {
+            res = getUserDAO().updateHeadImgById(id, headImg);
+        } catch (SqlException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    @Override
+    public void searchUserBykeyword(String keyword, Map<String, Object> responseMsgMap) {
+        try {
+            List<UsersEntity> list = getUserDAO().searchUserBykeyword(keyword);
+            if (list != null && !list.isEmpty()) {
+                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.USERS, list);
+            } else {
+                responseMsgMap.put(Parm.CODE, Parm.NOTFIND_CODE);
+                responseMsgMap.put(Parm.MEAN, "未找到");
+            }
+        } catch (SqlException e) {
+            e.printStackTrace();
+            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.MEAN, e.getMessage());
         }
     }
 

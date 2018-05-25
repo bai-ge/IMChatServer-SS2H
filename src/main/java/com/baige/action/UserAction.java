@@ -3,6 +3,7 @@ package com.baige.action;
 
 import com.baige.common.Parm;
 import com.baige.pojo.UsersEntity;
+import com.baige.service.IUserService;
 import com.baige.service.impl.UserServiceImpl;
 import com.baige.util.Tools;
 import org.apache.struts2.ServletActionContext;
@@ -27,6 +28,8 @@ public class UserAction extends BaseAction {
     private String remark;
 
     private UsersEntity user;
+
+    private IUserService userService;
 
     //封装上传文件域的成员变量
     private File headImg;
@@ -67,6 +70,13 @@ public class UserAction extends BaseAction {
         user.setRemark(remark);
     }
 
+    public IUserService getUserService() {
+        if(userService == null){
+            userService = new UserServiceImpl();
+        }
+        return userService;
+    }
+
     /**登录
      * {
      * 	"name":"baige",
@@ -83,8 +93,7 @@ public class UserAction extends BaseAction {
             user.setLoginTime(System.currentTimeMillis());
             user.setLoginIp(ServletActionContext.getRequest().getRemoteAddr());
             getResponseMsgMap().clear();
-            UserServiceImpl userService = new UserServiceImpl();
-            userService.login(user, getResponseMsgMap());
+            getUserService().login(user, getResponseMsgMap());
         }else{
             getResponseMsgMap().clear();
             getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
@@ -115,8 +124,89 @@ public class UserAction extends BaseAction {
             init();
             user.setRegisterTime(System.currentTimeMillis());
             getResponseMsgMap().clear();
-            UserServiceImpl userService = new UserServiceImpl();
-            userService.register(user, getResponseMsgMap());
+            getUserService().register(user, getResponseMsgMap());
+        }else{
+            getResponseMsgMap().clear();
+            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.MEAN, "参数错误");
+        }
+        return SUCCESS;
+    }
+
+    /**修改别名
+     *{
+     * "id":1,
+     * "alias":"jigjei",
+     * "verification":"1525878806203_2661"
+     * }
+     * @return
+     */
+    public String changeAlias(){
+        if(!Tools.isEmpty(getAlias()) && !Tools.isEmpty(getVerification())) {
+            init();
+            getResponseMsgMap().clear();
+            getUserService().updateAlias(user, getResponseMsgMap());
+        }else{
+            getResponseMsgMap().clear();
+            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.MEAN, "参数错误");
+        }
+        return SUCCESS;
+    }
+
+    /**修改头像
+     *  id
+     *  verification
+     *  file
+     * @return
+     */
+    public String changeImg(){
+        if(getHeadImg() != null && !Tools.isEmpty(getVerification())){
+            //验证用户
+            UsersEntity user = getUserService().checkUser(getId(), getVerification());
+            if(user != null){
+                try{
+                    File filePath = new File(getSavePath());
+                    if(!filePath.exists()){
+                        filePath.mkdirs();//若文件不存在，则创建
+                    }
+
+                    FileOutputStream fos= new FileOutputStream(new File(filePath,getHeadImgFileName()));
+                    FileInputStream fis=new FileInputStream(getHeadImg());
+                    byte[] buffer = new byte[1024];
+                    int len = 0;
+                    while( (len = fis.read(buffer) ) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.close();
+                    fis.close();
+
+                    //删除原来的头像文件
+                    if(!Tools.isEmpty(user.getImgName()) && !Tools.isEquals(user.getImgName(), getHeadImgFileName())){
+                        File file = new File(getSavePath(), user.getImgName());
+                        if(file.exists()){
+                            file.delete();
+                        }
+                    }
+
+                    //更新用户头像文件名
+                    if(getUserService().updateHeadImgName(getId(), getHeadImgFileName())){
+                        getResponseMsgMap().clear();
+                        getResponseMsgMap().put(Parm.CODE, Parm.SUCCESS_CODE);
+                        getResponseMsgMap().put(Parm.MEAN, "更改头像成功");
+                    }else{
+                        getResponseMsgMap().clear();
+                        getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+                        getResponseMsgMap().put(Parm.MEAN, "未知错误");
+                    }
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }else{
+                getResponseMsgMap().clear();
+                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.MEAN, "验证失败");
+            }
         }else{
             getResponseMsgMap().clear();
             getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
@@ -126,6 +216,46 @@ public class UserAction extends BaseAction {
     }
 
 
+    public String downloadImg(){
+
+        System.out.println("filePath ="+getImgPath()+", fileName ="+getImgFileName());
+        return SUCCESS;
+    }
+
+    public InputStream getImgInputStream() throws Exception{
+        //获得路径和文件名
+        String file = getImgPath() + File.separator + getImgFileName();
+        System.out.println("downloadFile ="+file);
+//        return ServletActionContext.getServletContext().getResourceAsStream(file);
+        InputStream is = new FileInputStream(file);
+        return is;
+    }
+
+    /**通过关键词查找用户
+     *  id
+     *  verification
+     *  keyword
+     * @return
+     */
+    public String searchUserByKeyword(){
+        if(!Tools.isEmpty(getKeyword()) && !Tools.isEmpty(getVerification())){
+            //验证用户
+            UsersEntity user = getUserService().checkUser(getId(), getVerification());
+            if(user != null){
+                getResponseMsgMap().clear();
+                getUserService().searchUserBykeyword(getKeyword(), getResponseMsgMap());
+            }else{
+                getResponseMsgMap().clear();
+                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.MEAN, "验证失败");
+            }
+        }else{
+            getResponseMsgMap().clear();
+            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.MEAN, "参数错误");
+        }
+        return SUCCESS;
+    }
     //TODO
     /*
     *

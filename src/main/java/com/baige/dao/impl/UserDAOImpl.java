@@ -77,6 +77,7 @@ public class UserDAOImpl extends BaseDAOImpl<UsersEntity> implements UserDAO {
         return user;
     }
 
+    @Override
     public UsersEntity updateAliasByIdAndVer(int id, String verification, String alias) throws SqlException {
         UsersEntity user = null;
         Session session = HibernateUtil.getSession(); // 生成session实例

@@ -7,7 +7,6 @@
     <class name="com.baige.pojo.FriendsEntity" table="friends" schema="imchatdb">
         <id name="id">
             <column name="id" sql-type="int(11)"/>
-            <generator class="increment"/>
         </id>
         <property name="userId">
             <column name="user_id" sql-type="int(11)" not-null="true"/>
@@ -15,26 +14,20 @@
         <property name="friendId">
             <column name="friend_id" sql-type="int(11)" not-null="true"/>
         </property>
-        <property name="userAlias">
-            <column name="user_alias" sql-type="varchar(100)" length="100" not-null="false"/>
-        </property>
         <property name="friendAlias">
-            <column name="friend_alias" sql-type="varchar(100)" length="100" not-null="false"/>
+            <column name="friend_alias" sql-type="varchar(100)" length="100" not-null="true"/>
         </property>
         <property name="relateTime">
-            <column name="relate_time" sql-type="bigint(20)" not-null="false"/>
+            <column name="relate_time" sql-type="bigint(20)" not-null="true"/>
         </property>
         <property name="state">
-            <column name="state" sql-type="int(11)" not-null="false"/>
+            <column name="state" sql-type="int(11)" not-null="true"/>
         </property>
-        <property name="userReadState">
-            <column name="user_read_state" sql-type="int(11)" not-null="false"/>
-        </property>
-        <property name="friendReadState">
-            <column name="friend_read_state" sql-type="int(11)" not-null="false"/>
+        <property name="readState">
+            <column name="read_state" sql-type="int(11)" not-null="true"/>
         </property>
         <property name="remark">
-            <column name="remark" sql-type="varchar(255)" not-null="false"/>
+            <column name="remark" sql-type="varchar(255)" not-null="true"/>
         </property>
     </class>
 </hibernate-mapping>
