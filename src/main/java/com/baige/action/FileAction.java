@@ -1,10 +1,15 @@
 package com.baige.action;
 
 
+import com.baige.common.Parm;
+import com.baige.common.State;
 import com.baige.pojo.FilesEntity;
+import com.baige.pojo.UsersEntity;
 import com.baige.service.impl.FileServiceImpl;
 import com.baige.service.impl.UserServiceImpl;
+import com.baige.util.Tools;
 import org.apache.struts2.ServletActionContext;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +28,7 @@ public class FileAction extends BaseAction {
     private String fileDescribe;
     private Long uploadTime;
     private Integer downloadCount;
+    private Integer fileLocation;
     private String remark;
 
 
@@ -46,20 +52,20 @@ public class FileAction extends BaseAction {
     private FileServiceImpl fileService;
 
     public UserServiceImpl getUserService() {
-        if(userService == null){
+        if (userService == null) {
             userService = new UserServiceImpl();
         }
         return userService;
     }
 
     public FileServiceImpl getFileService() {
-        if(fileService == null){
+        if (fileService == null) {
             fileService = new FileServiceImpl();
         }
         return fileService;
     }
 
-    private FilesEntity init(){
+    private FilesEntity init() {
         FilesEntity fileEntity = new FilesEntity();
         fileEntity.setUserId(getUid());
         fileEntity.setFileName(fileName);
@@ -69,31 +75,37 @@ public class FileAction extends BaseAction {
         fileEntity.setFileDescribe(fileDescribe);
         fileEntity.setUploadTime(System.currentTimeMillis());
         fileEntity.setDownloadCount(downloadCount);
+        fileEntity.setFileLocation(fileLocation);
         fileEntity.setRemark(remark);
         return fileEntity;
     }
 
-    public String uploadFile()throws Exception{
-        System.out.println("保存路径："+getSavePath());
-        System.out.println("原始路径："+getUpload());
-        if(getUpload() != null){
+    /**
+     * 上传文件到云端
+     * @return
+     * @throws Exception
+     */
+    public String uploadFile() throws Exception {
+        System.out.println("保存路径：" + getSavePath());
+        System.out.println("原始路径：" + getUpload());
+        if (getUpload() != null) {
             System.out.println(getUpload().getAbsolutePath());
         }
 
 
-        File f=new File(getSavePath());
-        if(!f.exists()){
+        File f = new File(getSavePath());
+        if (!f.exists()) {
             f.mkdirs();//若文件不存在，则创建
         }
 
 
         File saveFile = new File(f, getUpload().getName());
-        FileOutputStream fos= new FileOutputStream(saveFile);
-        FileInputStream fis=new FileInputStream(getUpload());
-        byte[] buffer=new byte[1024];
-        int len=0;
-        while((len=fis.read(buffer))>0){
-            fos.write(buffer,0,len);
+        FileOutputStream fos = new FileOutputStream(saveFile);
+        FileInputStream fis = new FileInputStream(getUpload());
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while ((len = fis.read(buffer)) > 0) {
+            fos.write(buffer, 0, len);
         }
 
         fos.close();
@@ -101,9 +113,12 @@ public class FileAction extends BaseAction {
 
         //保存进数据库
         FilesEntity entity = init();
+        entity.setFileLocation(State.REMOTE);
         entity.setUserId(getUid());
         entity.setFileName(getUploadFileName());
+        //TODO 需要改为相对路径，方便数据迁移
         entity.setFilePath(saveFile.getAbsolutePath());
+        entity.setDownloadCount(0);
         System.out.println(entity.toString());
         getResponseMsgMap().clear();
         getFileService().saveFile(entity, getResponseMsgMap());
@@ -121,38 +136,69 @@ public class FileAction extends BaseAction {
         return SUCCESS;
     }
 
+    /**
+     * uid
+     * verification
+     * @return
+     */
+    public String share(){
+        if(!Tools.isEmpty(verification) ){
+            UsersEntity user = getUserService().checkUser(getUid(), getVerification());
+            if(user != null){
+                getResponseMsgMap().clear();
+                FilesEntity filesEntity = init();
+                filesEntity.setUserId(getUid());
+                filesEntity.setFileLocation(State.LOCAL);
+                filesEntity.setUploadTime(System.currentTimeMillis());
+                filesEntity.setDownloadCount(0);
 
-
-    public void setSavePath(String value){
-        this.savePath=value;
+                getFileService().saveFile(filesEntity, getResponseMsgMap());
+            }else{
+                getResponseMsgMap().clear();
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
+                getResponseMsgMap().put(Parm.MEAN, "验证失败");
+            }
+        }else{
+            getResponseMsgMap().clear();
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
+            getResponseMsgMap().put(Parm.MEAN, "参数错误");
+        }
+        return SUCCESS;
     }
 
-    public String getSavePath(){
+
+    public void setSavePath(String value) {
+        this.savePath = value;
+    }
+
+    public String getSavePath() {
         return ServletActionContext.getServletContext()
                 .getRealPath(savePath);
     }
 
-    public void setUpload(File upload){
-        this.upload=upload;
+    public void setUpload(File upload) {
+        this.upload = upload;
     }
 
-    public File getUpload(){
+    public File getUpload() {
         return this.upload;
     }
 
-    public void setUploadContentType(String uploadContentType){
-        this.uploadContentType=uploadContentType;
-    }
-    public String getUploadContentType(){
-        return this.uploadContentType;
-    }
-    public void setUploadFileName(String uploadFileName){
-        this.uploadFileName=uploadFileName;
-    }
-    public String getUploadFileName(){
-        return this.uploadFileName;
+    public void setUploadContentType(String uploadContentType) {
+        this.uploadContentType = uploadContentType;
     }
 
+    public String getUploadContentType() {
+        return this.uploadContentType;
+    }
+
+    public void setUploadFileName(String uploadFileName) {
+        this.uploadFileName = uploadFileName;
+    }
+
+    public String getUploadFileName() {
+        return this.uploadFileName;
+    }
 
 
     public int getId() {
@@ -225,6 +271,14 @@ public class FileAction extends BaseAction {
 
     public void setDownloadCount(Integer downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public Integer getFileLocation() {
+        return fileLocation;
+    }
+
+    public void setFileLocation(Integer fileLocation) {
+        this.fileLocation = fileLocation;
     }
 
     public String getRemark() {

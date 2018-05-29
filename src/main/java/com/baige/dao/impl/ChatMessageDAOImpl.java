@@ -173,7 +173,7 @@ public class ChatMessageDAOImpl extends BaseDAOImpl<ChatMessageEntity> implement
         try {
             // 对应的“name” 是Bean中的字段名而不是数据库中表内的字段名
             Query q = session.createQuery("update ChatMessageEntity c set c.contextState  =:state  where (c.senderId = :uid or c.receiveId = :uid) and c.sendTime <= :time");
-            q.setInteger("state", State.MSG_STATE_READED);
+            q.setInteger("state", State.READ_STATE);
             q.setInteger("uid", uid);
             q.setLong("time", time);
             count = q.executeUpdate();
@@ -196,7 +196,7 @@ public class ChatMessageDAOImpl extends BaseDAOImpl<ChatMessageEntity> implement
         try {
             // 对应的“name” 是Bean中的字段名而不是数据库中表内的字段名
             Query q = session.createQuery("update ChatMessageEntity c set c.contextState  =:state  where ((c.senderId = :uid and c.receiveId = :friendId) or (c.senderId = :friendId and c.receiveId = :uid)) and c.sendTime <= :time");
-            q.setInteger("state", State.MSG_STATE_READED);
+            q.setInteger("state", State.READ_STATE);
             q.setInteger("uid", uid);
             q.setInteger("friendId", friendId);
             q.setLong("time", time);

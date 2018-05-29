@@ -10,13 +10,13 @@
             <generator class="increment"/>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)" not-null="true"/>
+            <column name="user_id" sql-type="int(11)" not-null="false"/>
         </property>
         <property name="fileName">
-            <column name="file_name" sql-type="varchar(255)" not-null="true"/>
+            <column name="file_name" sql-type="varchar(255)" not-null="false"/>
         </property>
         <property name="filePath">
-            <column name="file_path" sql-type="varchar(255)" not-null="true"/>
+            <column name="file_path" sql-type="varchar(255)" not-null="false"/>
         </property>
         <property name="fileType">
             <column name="file_type" sql-type="int(11)" not-null="false"/>
@@ -32,6 +32,9 @@
         </property>
         <property name="downloadCount">
             <column name="download_count" sql-type="int(11)" not-null="false"/>
+        </property>
+        <property name="fileLocation">
+            <column name="file_location" sql-type="int(11)" not-null="false"/>
         </property>
         <property name="remark">
             <column name="remark" sql-type="varchar(255)" not-null="false"/>

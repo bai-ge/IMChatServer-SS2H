@@ -96,7 +96,7 @@ public class UserAction extends BaseAction {
             getUserService().login(user, getResponseMsgMap());
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -127,7 +127,7 @@ public class UserAction extends BaseAction {
             getUserService().register(user, getResponseMsgMap());
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -148,7 +148,7 @@ public class UserAction extends BaseAction {
             getUserService().updateAlias(user, getResponseMsgMap());
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -192,11 +192,11 @@ public class UserAction extends BaseAction {
                     //更新用户头像文件名
                     if(getUserService().updateHeadImgName(getId(), getHeadImgFileName())){
                         getResponseMsgMap().clear();
-                        getResponseMsgMap().put(Parm.CODE, Parm.SUCCESS_CODE);
+                        getResponseMsgMap().put(Parm.CODE, Parm.CODE_SUCCESS);
                         getResponseMsgMap().put(Parm.MEAN, "更改头像成功");
                     }else{
                         getResponseMsgMap().clear();
-                        getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+                        getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
                         getResponseMsgMap().put(Parm.MEAN, "未知错误");
                     }
                 }catch (IOException e){
@@ -204,12 +204,12 @@ public class UserAction extends BaseAction {
                 }
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -246,12 +246,12 @@ public class UserAction extends BaseAction {
                 getUserService().searchUserBykeyword(getKeyword(), getResponseMsgMap());
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;

@@ -24,11 +24,11 @@ public class FileServiceImpl implements IFileService {
     public void saveFile(FilesEntity fileEntity, Map<String, Object> responseMsgMap) {
         try{
             getFileDAO().doSave(fileEntity);
-            responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
-            responseMsgMap.put(Parm.MEAN, "文件上传成功");
+            responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
+            responseMsgMap.put(Parm.MEAN, "文件分享成功");
         }catch (SqlException e){
             e.printStackTrace();
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, e.getMessage());
         }
     }
@@ -38,16 +38,16 @@ public class FileServiceImpl implements IFileService {
         try{
             List<FilesEntity> fileEntities = getFileDAO().doFindAll();
             if(fileEntities != null && fileEntities.size() > 0){
-                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.MEAN, "查询成功");
                 responseMsgMap.put(Parm.FILES, fileEntities);
             }else{
-                responseMsgMap.put(Parm.CODE, Parm.NOTFIND_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_NOTFIND);
                 responseMsgMap.put(Parm.MEAN, "未找到");
             }
         }catch (SqlException e){
             e.printStackTrace();
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, e.getMessage());
         }
     }

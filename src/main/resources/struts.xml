@@ -172,5 +172,11 @@
                 <param name="root">responseMsgMap</param>
             </result>
         </action>
+        <action name="share" class="com.baige.action.FileAction" method="share">
+            <interceptor-ref name="json"></interceptor-ref>
+            <result name="success" type="json">
+                <param name="root">responseMsgMap</param>
+            </result>
+        </action>
     </package>
 </struts>

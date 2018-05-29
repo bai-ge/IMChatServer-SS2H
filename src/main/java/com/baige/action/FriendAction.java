@@ -63,12 +63,12 @@ public class FriendAction extends BaseAction {
                  getFriendService().searchFriends(uid, getResponseMsgMap());
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -89,12 +89,12 @@ public class FriendAction extends BaseAction {
                 getFriendService().changFriendAlias(id, uid, getAlias(), getResponseMsgMap());
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -114,12 +114,12 @@ public class FriendAction extends BaseAction {
                 getFriendService().relateUser(uid, friendId, getResponseMsgMap());
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -155,16 +155,19 @@ public class FriendAction extends BaseAction {
                     case "defriend":
                         getFriendService().deFriend(getId(), getUid(), getFriendId(), getResponseMsgMap());
                         break;
+                    case "cancel_defriend":
+                        getFriendService().cancelDefriend(getId(), getUid(), getFriendId(), getResponseMsgMap());
+                        break;
                 }
 
             }else{
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         }else{
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;

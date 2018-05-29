@@ -55,16 +55,16 @@ public class UserServiceImpl implements IUserService {
                 updateUser.setVerification(Tools.randomVerification());
                 updateUser.setLoginIp(user.getLoginIp());
                 getUserDAO().doUpdate(updateUser);
-                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.MEAN, "登录成功");
                 responseMsgMap.put(Parm.USER, updateUser);
             } else {
-                responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
                 responseMsgMap.put(Parm.MEAN, "用户不存在或密码错误");
             }
         } catch (SqlException e) {
             e.printStackTrace();
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, e.getMessage());
         }
     }
@@ -75,16 +75,16 @@ public class UserServiceImpl implements IUserService {
             // 插入数据
             try {
                 getUserDAO().doSave(user);
-                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.MEAN, "注册成功");
                 responseMsgMap.put(Parm.USER, user);
             } catch (SqlException e) {
                 e.printStackTrace();
-                responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
                 responseMsgMap.put(Parm.MEAN, e.getMessage());
             }
         } else {
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, "用户已经存在");
         }
     }
@@ -105,15 +105,15 @@ public class UserServiceImpl implements IUserService {
         try {
             user = getUserDAO().updateAliasByIdAndVer(user.getId(), user.getVerification(), user.getAlias());
             if (user != null) {
-                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.MEAN, "更新成功");
             } else {
-                responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
                 responseMsgMap.put(Parm.MEAN, "更新失败");
             }
         } catch (SqlException e) {
             e.printStackTrace();
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, "更新失败");
         }
     }
@@ -134,15 +134,15 @@ public class UserServiceImpl implements IUserService {
         try {
             List<UsersEntity> list = getUserDAO().searchUserBykeyword(keyword);
             if (list != null && !list.isEmpty()) {
-                responseMsgMap.put(Parm.CODE, Parm.SUCCESS_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.USERS, list);
             } else {
-                responseMsgMap.put(Parm.CODE, Parm.NOTFIND_CODE);
+                responseMsgMap.put(Parm.CODE, Parm.CODE_NOTFIND);
                 responseMsgMap.put(Parm.MEAN, "未找到");
             }
         } catch (SqlException e) {
             e.printStackTrace();
-            responseMsgMap.put(Parm.CODE, Parm.FAIL_CODE);
+            responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
             responseMsgMap.put(Parm.MEAN, e.getMessage());
         }
     }

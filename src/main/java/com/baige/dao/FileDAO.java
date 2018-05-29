@@ -12,5 +12,6 @@ public interface FileDAO {
     String FILE_DESCRIBE = "fileDescribe";
     String UPLOAD_TIME = "uploadTime";
     String DOWNLOAD_COUNT = "downloadCount";
+    String FILE_LOCATION = "fileLocation";
     String REMARK = "remark";
 }

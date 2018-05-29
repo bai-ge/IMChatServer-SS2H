@@ -1,27 +1,20 @@
 package com.baige.pojo;
 
-public class FriendView {
+import java.util.Objects;
 
-    private int id; //Friend 表中的ID
-    private int uid; //用户ID
-    private int friendId;
-    private String friendName;
+public class FriendView {
+    private int id;
+    private Integer userId;
+    private Integer friendId;
+    private String name;
     private String alias;
     private String friendAlias;
-    private long relateTime;
-    private int state;
-    private int readState; //自己是否已读
-    private String remake;
-    private String friendImgName;
-    private String friendDeviceId;
-
-    public String getFriendName() {
-        return friendName;
-    }
-
-    public void setFriendName(String friendName) {
-        this.friendName = friendName;
-    }
+    private Long relateTime;
+    private Integer state;
+    private Integer readState;
+    private String remark;
+    private String imgName;
+    private String deviceId;
 
     public int getId() {
         return id;
@@ -31,20 +24,28 @@ public class FriendView {
         this.id = id;
     }
 
-    public int getUid() {
-        return uid;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public int getFriendId() {
+    public Integer getFriendId() {
         return friendId;
     }
 
-    public void setFriendId(int friendId) {
+    public void setFriendId(Integer friendId) {
         this.friendId = friendId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAlias() {
@@ -63,51 +64,76 @@ public class FriendView {
         this.friendAlias = friendAlias;
     }
 
-    public long getRelateTime() {
+    public Long getRelateTime() {
         return relateTime;
     }
 
-    public void setRelateTime(long relateTime) {
+    public void setRelateTime(Long relateTime) {
         this.relateTime = relateTime;
     }
 
-    public int getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(int state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 
-    public int getReadState() {
+    public Integer getReadState() {
         return readState;
     }
 
-    public void setReadState(int readState) {
+    public void setReadState(Integer readState) {
         this.readState = readState;
     }
 
-    public String getRemake() {
-        return remake;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setRemake(String remake) {
-        this.remake = remake;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
-    public String getFriendImgName() {
-        return friendImgName;
+    public String getImgName() {
+        return imgName;
     }
 
-    public void setFriendImgName(String friendImgName) {
-        this.friendImgName = friendImgName;
+    public void setImgName(String imgName) {
+        this.imgName = imgName;
     }
 
-    public String getFriendDeviceId() {
-        return friendDeviceId;
+    public String getDeviceId() {
+        return deviceId;
     }
 
-    public void setFriendDeviceId(String friendDeviceId) {
-        this.friendDeviceId = friendDeviceId;
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FriendView that = (FriendView) o;
+        return id == that.id &&
+                Objects.equals(userId, that.userId) &&
+                Objects.equals(friendId, that.friendId) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(alias, that.alias) &&
+                Objects.equals(friendAlias, that.friendAlias) &&
+                Objects.equals(relateTime, that.relateTime) &&
+                Objects.equals(state, that.state) &&
+                Objects.equals(readState, that.readState) &&
+                Objects.equals(remark, that.remark) &&
+                Objects.equals(imgName, that.imgName) &&
+                Objects.equals(deviceId, that.deviceId);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, userId, friendId, name, alias, friendAlias, relateTime, state, readState, remark, imgName, deviceId);
     }
 }

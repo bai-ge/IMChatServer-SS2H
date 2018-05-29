@@ -10,6 +10,7 @@ public class FilesEntity {
     private String fileDescribe;
     private Long uploadTime;
     private Integer downloadCount;
+    private Integer fileLocation;
     private String remark;
 
     public int getId() {
@@ -82,6 +83,14 @@ public class FilesEntity {
 
     public void setDownloadCount(Integer downloadCount) {
         this.downloadCount = downloadCount;
+    }
+
+    public Integer getFileLocation() {
+        return fileLocation;
+    }
+
+    public void setFileLocation(Integer fileLocation) {
+        this.fileLocation = fileLocation;
     }
 
     public String getRemark() {

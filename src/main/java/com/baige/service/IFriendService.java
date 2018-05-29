@@ -17,4 +17,6 @@ public interface IFriendService {
     void deleteFriend(int id, int uid, int friendId, Map<String, Object> responseMsgMap);
 
     void deFriend(int id, int uid, int friendId, Map<String, Object> responseMsgMap);
+
+    void cancelDefriend(int id, int uid, int friendId, Map<String, Object> responseMsgMap);
 }

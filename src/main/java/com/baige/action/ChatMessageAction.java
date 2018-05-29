@@ -62,12 +62,12 @@ public class ChatMessageAction extends BaseAction {
                 getChatMessageService().sendMessage(chatMessage, getResponseMsgMap());
             } else {
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         } else {
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -92,12 +92,12 @@ public class ChatMessageAction extends BaseAction {
                 }
             } else {
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         } else {
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -123,12 +123,12 @@ public class ChatMessageAction extends BaseAction {
                 }
             } else {
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         } else {
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -154,12 +154,12 @@ public class ChatMessageAction extends BaseAction {
                 }
             } else {
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         } else {
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -185,12 +185,12 @@ public class ChatMessageAction extends BaseAction {
                 }
             } else {
                 getResponseMsgMap().clear();
-                getResponseMsgMap().put(Parm.CODE, Parm.INVALID_CODE);
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
                 getResponseMsgMap().put(Parm.MEAN, "验证失败");
             }
         } else {
             getResponseMsgMap().clear();
-            getResponseMsgMap().put(Parm.CODE, Parm.UNKNOWN_CODE);
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
             getResponseMsgMap().put(Parm.MEAN, "参数错误");
         }
         return SUCCESS;
@@ -211,7 +211,7 @@ public class ChatMessageAction extends BaseAction {
         if (contextType != null) {
             chatMessage.setContextType(contextType);
         }
-        chatMessage.setContextState(State.MSG_STATE_UNREAD);
+        chatMessage.setContextState(State.UNREAD_STATE);
         if(contextState != null){
             chatMessage.setContextType(contextState);
         }
