@@ -40,6 +40,44 @@ public class FriendDAOImpl extends BaseDAOImpl<FriendsEntity> implements FriendD
     }
 
     @Override
+    public FriendView searchFriendView(int userId, int friendId) throws SqlException {
+        FriendView friendView = null;
+        Session session = HibernateUtil.getSession(); // 生成session实例
+        Transaction tx = session.beginTransaction(); // 创建transaction实例
+        try {
+            Criteria criteria = session.createCriteria(FriendView.class).add(Restrictions.eq(FriendDAO.USER_ID, userId)).add(Restrictions.eq(FriendDAO.FRIEND_ID, friendId));
+            friendView = (FriendView) criteria.uniqueResult();
+            tx.commit(); // 提交事务;
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback(); // 回滚事务
+            throw new SqlException("sql execute fail !");
+        } finally {
+            session.close();
+        }
+        return friendView;
+    }
+
+    @Override
+    public FriendView searchFriendById(int id) throws SqlException {
+        FriendView friendView = null;
+        Session session = HibernateUtil.getSession(); // 生成session实例
+        Transaction tx = session.beginTransaction(); // 创建transaction实例
+        try {
+            Criteria criteria = session.createCriteria(FriendView.class).add(Restrictions.eq(FriendDAO.ID, id));
+            friendView = (FriendView) criteria.uniqueResult();
+            tx.commit(); // 提交事务;
+        } catch (Exception e) {
+            e.printStackTrace();
+            tx.rollback(); // 回滚事务
+            throw new SqlException("sql execute fail !");
+        } finally {
+            session.close();
+        }
+        return friendView;
+    }
+
+    @Override
     public List<FriendView> searchFriend(int uid) throws SqlException {
         List<FriendView> list;
         Session session = HibernateUtil.getSession(); // 生成session实例

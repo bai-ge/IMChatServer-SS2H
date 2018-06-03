@@ -2,11 +2,16 @@ package com.baige.service.impl;
 
 import com.baige.common.Parm;
 import com.baige.common.State;
+import com.baige.connect.msg.PushHelper;
+import com.baige.dao.impl.ChatMessageDAOImpl;
 import com.baige.dao.impl.FriendDAOImpl;
+import com.baige.dao.impl.UserDAOImpl;
 import com.baige.exception.SqlException;
 import com.baige.pojo.FriendView;
 import com.baige.pojo.FriendsEntity;
+import com.baige.pojo.UsersEntity;
 import com.baige.service.IFriendService;
+import com.baige.util.JsonTools;
 
 import java.util.List;
 import java.util.Map;
@@ -15,12 +20,24 @@ public class FriendServiceImpl implements IFriendService {
 
     private FriendDAOImpl friendDAO;
 
+    UserDAOImpl userDAO;
+
+
+
     public FriendDAOImpl getFriendDAO() {
         if (friendDAO == null){
             friendDAO = new FriendDAOImpl();
         }
         return friendDAO;
     }
+
+    public UserDAOImpl getUserDAO() {
+        if(userDAO == null){
+            userDAO = new UserDAOImpl();
+        }
+        return userDAO;
+    }
+
 
     @Override
     public void searchFriends(int uid, Map<String, Object> responseMsgMap) {
@@ -62,6 +79,14 @@ public class FriendServiceImpl implements IFriendService {
                 responseMsgMap.put(Parm.CODE, Parm.CODE_SUCCESS);
                 responseMsgMap.put(Parm.MEAN, "等待对方同意");
                 responseMsgMap.put(Parm.DATA, friend);
+
+                //推送好友通知
+                FriendView friendView = getFriendDAO().searchFriendView(friend.getFriendId(), friend.getUserId());
+                if(friendView != null){
+                    UsersEntity from = getUserDAO().doGetById(friend.getUserId());
+                    UsersEntity to = getUserDAO().doGetById(friend.getFriendId());
+                    PushHelper.push(from.getDeviceId(), to.getDeviceId(), JsonTools.getJSON(friendView), Parm.FRIEND);
+                }
             } else {
                 responseMsgMap.put(Parm.CODE, Parm.CODE_FAIL);
                 responseMsgMap.put(Parm.MEAN, "未知错误");

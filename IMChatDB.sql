@@ -1,3 +1,9 @@
+
+
+DROP TABLE if exists chat_message;
+DROP TABLE if exists friends;
+DROP TABLE if exists files;
+DROP VIEW IF EXISTS friendsView;
 -- 用户表 users
 DROP TABLE if exists users;
 CREATE TABLE users (
@@ -14,7 +20,6 @@ CREATE TABLE users (
   remark varchar(255),	-- 备注
   PRIMARY KEY(id)
 ) DEFAULT CHARSET=UTF8;
-
 
 
 -- 聊天记录表 chat_message
@@ -35,7 +40,7 @@ CREATE TABLE chat_message (
 
 
 
--- 好友表 friends
+-- 好友表 friends 已废除
 DROP TABLE if exists friends;
 CREATE TABLE friends (
   id int auto_increment,
@@ -82,11 +87,29 @@ CREATE TABLE files (
   file_describe varchar(255), -- 文件描述
   upload_time bigint(20),     -- 上传时间
   download_count int,         -- 下载量
+  file_location int,           -- 文件位置
   remark varchar(255),	      -- 备注
   PRIMARY KEY(id),
   foreign key(user_id) references users(id)
 ) DEFAULT CHARSET=UTF8;
 
 
+-- 好友视图
+DROP VIEW IF EXISTS friendsView;
+CREATE VIEW friendsView AS
+SELECT  friends.id,
+        friends.user_id,
+        friends.friend_id,
+        users.name,
+        users.alias,
+        friends.friend_alias,
+        friends.relate_time,
+        friends.state,
+        friends.read_state,
+        friends.remark,
+        users.img_name,
+        users.device_id
+FROM users JOIN  friends
+ON users.id = friends.friend_id;
 
 

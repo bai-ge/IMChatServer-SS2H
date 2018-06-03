@@ -1,5 +1,7 @@
 package com.baige.dao;
 
+import com.baige.exception.SqlException;
+
 public interface FileDAO {
 
 
@@ -14,4 +16,7 @@ public interface FileDAO {
     String DOWNLOAD_COUNT = "downloadCount";
     String FILE_LOCATION = "fileLocation";
     String REMARK = "remark";
+
+    void addDownloadCount(int fid) throws SqlException;
+
 }

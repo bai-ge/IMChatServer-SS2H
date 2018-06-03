@@ -3,17 +3,15 @@ package com.baige.action;
 
 import com.baige.common.Parm;
 import com.baige.common.State;
+import com.baige.exception.SqlException;
 import com.baige.pojo.FilesEntity;
 import com.baige.pojo.UsersEntity;
 import com.baige.service.impl.FileServiceImpl;
 import com.baige.service.impl.UserServiceImpl;
 import com.baige.util.Tools;
 import org.apache.struts2.ServletActionContext;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 
 
 public class FileAction extends BaseAction {
@@ -50,6 +48,11 @@ public class FileAction extends BaseAction {
     private UserServiceImpl userService;
 
     private FileServiceImpl fileService;
+
+    //文件下载
+    private Integer fn;
+    private FilesEntity downloadFile;
+    private String downloadFileName;
 
     public UserServiceImpl getUserService() {
         if (userService == null) {
@@ -125,6 +128,91 @@ public class FileAction extends BaseAction {
         return SUCCESS;
     }
 
+
+    /**
+     * fn=id;
+     * @return
+     */
+    public String download(){
+        if(fn == null){
+            return ERROR;
+        }
+        try {
+            System.out.println("下载文件:"+getFn());
+            downloadFile = getFileService().getFileDAO().doGetById(getFn());
+            downloadFileName = downloadFile.getFileName();
+            File file = new File(downloadFile.getFilePath());
+            if(!file.exists()){
+                downloadFile = null;
+                System.out.println("文件不存在");
+                return ERROR;
+            }
+//            getFileService().addDownloadCount(getFn());
+        } catch (SqlException e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * uid
+     * verification
+     * fn
+     * @return
+     */
+    public String deleteFile(){
+        if(!Tools.isEmpty(verification)){
+            UsersEntity user = getUserService().checkUser(getUid(), getVerification());
+            if(user != null){
+                getResponseMsgMap().clear();
+                getFileService().deleteFile(getFn(), getUid(), getResponseMsgMap());
+            }else{
+                getResponseMsgMap().clear();
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_INVALID);
+                getResponseMsgMap().put(Parm.MEAN, "验证失败");
+            }
+        }else{
+            getResponseMsgMap().clear();
+            getResponseMsgMap().put(Parm.CODE, Parm.CODE_UNKNOWN);
+            getResponseMsgMap().put(Parm.MEAN, "参数错误");
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * fn=id;
+     * @return
+     */
+    public String updateDownloadCount(){
+        getFileService().addDownloadCount(getFn());
+        try {
+            FilesEntity filesEntity = getFileService().getFileDAO().doGetById(getFn());
+            if(filesEntity != null){
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_SUCCESS);
+                getResponseMsgMap().put(Parm.FILE, filesEntity);
+                getResponseMsgMap().put(Parm.MEAN, "更新成功");
+            }else{
+                getResponseMsgMap().put(Parm.CODE, Parm.CODE_FAIL);
+                getResponseMsgMap().put(Parm.MEAN, "更新失败");
+            }
+        } catch (SqlException e) {
+            e.printStackTrace();
+        }
+        return SUCCESS;
+    }
+
+
+
+    public InputStream getDownloadInputStream() throws Exception{
+        //获得路径和文件名
+        if(downloadFile == null){
+            return null;
+        }
+        System.out.println("downloadFile ="+ downloadFile.getFilePath());
+//        return ServletActionContext.getServletContext().getResourceAsStream(file);
+        InputStream is = new FileInputStream(downloadFile.getFilePath());
+        return is;
+    }
 
     /**
      * @return 查找所有文件
@@ -305,5 +393,15 @@ public class FileAction extends BaseAction {
         this.verification = verification;
     }
 
+    public Integer getFn() {
+        return fn;
+    }
 
+    public void setFn(Integer fn) {
+        this.fn = fn;
+    }
+
+    public String getDownloadFileName() {
+        return downloadFileName;
+    }
 }

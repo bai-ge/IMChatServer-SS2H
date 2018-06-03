@@ -21,6 +21,10 @@ public interface FriendDAO {
 
     List<FriendView> searchFriend(int uid) throws SqlException;
 
+    FriendView searchFriendView(int userId, int friendId) throws SqlException;
+
+    FriendView searchFriendById(int fid) throws SqlException;
+
     boolean changFriendAlias(int id, int uid, String alias) throws SqlException;
 
     FriendsEntity relateUser(int userId, int friendId) throws SqlException;

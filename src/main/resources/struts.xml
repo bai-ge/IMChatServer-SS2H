@@ -9,13 +9,13 @@
 
     <!--开发阶段用到的常量设置 ，开发阶段结束后必须注释 -->
     <!-- 重新加载struts.xml文件 -->
-    <constant name="struts.configuration.xml.reload" value="true" />
+    <constant name="struts.configuration.xml.reload" value="true"/>
 
     <!-- 打印更多的错误信息，便于查找错原因 -->
-    <constant name="strusts.devMode" value="true" />
+    <constant name="strusts.devMode" value="true"/>
 
     <!-- 关闭静态态缓冲 -->
-    <constant name="strusts.serve.static.browserCache" value="false" />
+    <constant name="strusts.serve.static.browserCache" value="false"/>
 
     <!--设置上传文件大小20MB，默认为2MB大小 -->
     <constant name="struts.multipart.maxSize" value="20971520"/>
@@ -27,6 +27,11 @@
 
 
     <package name="user" namespace="/user" extends="json-default">
+
+        <!--登录测试，不用json-->
+        <action name="loginTest" class="com.baige.action.UserAction" method="loginTest">
+            <result name="success">/login.jsp</result>
+        </action>
         <!--登录注册-->
         <action name="login" class="com.baige.action.UserAction" method="login">
             <interceptor-ref name="json"></interceptor-ref>
@@ -153,7 +158,7 @@
 
     </package>
     <package name="file" namespace="/file" extends="json-default">
-        <action name="upload" class="com.baige.action.FileAction" method="uploadFile" >
+        <action name="upload" class="com.baige.action.FileAction" method="uploadFile">
             <interceptor-ref name="fileUpload">
                 <!--<param name="allowedTypes">image/png,image/gif,image/jpeg,image/pjpeg,image/x-png</param>-->
                 <param name="maximunSize">8388608</param>
@@ -173,6 +178,29 @@
             </result>
         </action>
         <action name="share" class="com.baige.action.FileAction" method="share">
+            <interceptor-ref name="json"></interceptor-ref>
+            <result name="success" type="json">
+                <param name="root">responseMsgMap</param>
+            </result>
+        </action>
+        <action name="download" class="com.baige.action.FileAction" method="download">
+            <result name="success" type="stream">
+                <param name="contentType">application/octet-stream</param>
+                <param name="inputName">downloadInputStream</param>
+                <param name="contentDisposition">filename=${downloadFileName}</param>
+                <param name="bufferSize">4096</param>
+            </result>
+            <result name="error" type="httpheader">
+                <param name="status">404</param>
+            </result>
+        </action>
+        <action name="downloadCount" class="com.baige.action.FileAction" method="updateDownloadCount">
+            <result name="success" type="json">
+                <param name="root">responseMsgMap</param>
+            </result>
+        </action>
+
+        <action name="delete" class="com.baige.action.FileAction" method="deleteFile">
             <interceptor-ref name="json"></interceptor-ref>
             <result name="success" type="json">
                 <param name="root">responseMsgMap</param>

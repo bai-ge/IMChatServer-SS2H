@@ -14,7 +14,7 @@
 <div> <h3>用户登录 </h3> <a href="register.jsp">注册</a> </div>
 
 <span id="tip" style="color: red; font-weight: bold"></span>
-<form  action="login.action" method="post">
+<form  action="/user/loginTest.action" method="post">
     <table>
         <tr>
             <td>用户名：</td>
@@ -31,7 +31,7 @@
             </td>
         </tr>
     </table>
-
 </form>
+${name}
 </body>
 </html>

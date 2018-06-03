@@ -52,6 +52,17 @@ public class UserAction extends BaseAction {
     private String keyword;
 
 
+    public String loginTest(){
+        System.out.println("loginTest");
+        if (name != null && name.equals("aa")) {
+            ServletActionContext.getContext().getSession().put("name", getName());
+            System.out.println("aa");
+        }
+        System.out.println("return");
+
+        return SUCCESS;
+    }
+
 
     private void init(){
         if(user == null){
